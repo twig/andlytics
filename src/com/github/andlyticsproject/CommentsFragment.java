@@ -7,19 +7,21 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.github.andlyticsproject.CommentsFragment.Comments;
 import com.github.andlyticsproject.console.v2.DevConsoleRegistry;
 import com.github.andlyticsproject.console.v2.DevConsoleV2;
@@ -32,7 +34,7 @@ import com.github.andlyticsproject.util.LoaderBase;
 import com.github.andlyticsproject.util.LoaderResult;
 import com.github.andlyticsproject.util.Utils;
 
-public class CommentsFragment extends SherlockFragment implements StatsView<Comment>,
+public class CommentsFragment extends Fragment implements StatsView<Comment>,
 		LoaderManager.LoaderCallbacks<LoaderResult<Comments>> {
 
 	private static final String TAG = CommentsFragment.class.getSimpleName();
@@ -199,8 +201,8 @@ public class CommentsFragment extends SherlockFragment implements StatsView<Comm
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		getSherlockActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		getSherlockActivity().getSupportActionBar().setTitle(getTitle());
+		((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(getTitle());
 	}
 
 
@@ -208,7 +210,7 @@ public class CommentsFragment extends SherlockFragment implements StatsView<Comm
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		// calling initLoader() here results in onLoadFinished() being 
+		// calling initLoader() here results in onLoadFinished() being
 		// called twice. Bad things happen then...
 	}
 
@@ -218,11 +220,11 @@ public class CommentsFragment extends SherlockFragment implements StatsView<Comm
 
 		list = (ExpandableListView) view.findViewById(R.id.comments_list);
 		// TODO Use ListView.setEmptyView
-		nocomments = (View) view.findViewById(R.id.comments_nocomments);
+		nocomments = view.findViewById(R.id.comments_nocomments);
 
 		// footer
 		View inflate = inflater.inflate(R.layout.comments_list_footer, null);
-		footer = (View) inflate.findViewById(R.id.comments_list_footer);
+		footer = inflate.findViewById(R.id.comments_list_footer);
 		list.addFooterView(inflate, null, false);
 
 		View header = inflater.inflate(R.layout.comments_list_header, null);
@@ -298,8 +300,7 @@ public class CommentsFragment extends SherlockFragment implements StatsView<Comm
 		inflater.inflate(R.menu.comments_menu, menu);
 
 		if (statsActivity.isRefreshing()) {
-			menu.findItem(R.id.itemCommentsmenuRefresh).setActionView(
-					R.layout.action_bar_indeterminate_progress);
+		    MenuItemCompat.setActionView(menu.findItem(R.id.itemCommentsmenuRefresh), R.layout.action_bar_indeterminate_progress);
 		}
 	}
 

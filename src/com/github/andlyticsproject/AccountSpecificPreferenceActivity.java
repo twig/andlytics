@@ -8,9 +8,8 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
+import android.view.MenuItem;
 
-import com.actionbarsherlock.app.SherlockPreferenceActivity;
-import com.actionbarsherlock.view.MenuItem;
 import com.github.andlyticsproject.AsyncTasks.LoadAppListTask;
 import com.github.andlyticsproject.AsyncTasks.LoadAppListTaskCompleteListener;
 import com.github.andlyticsproject.model.AppInfo;

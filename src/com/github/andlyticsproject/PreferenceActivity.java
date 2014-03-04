@@ -13,9 +13,8 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
+import android.view.MenuItem;
 
-import com.actionbarsherlock.app.SherlockPreferenceActivity;
-import com.actionbarsherlock.view.MenuItem;
 import com.github.andlyticsproject.model.DeveloperAccount;
 import com.github.andlyticsproject.sync.AutosyncHandler;
 

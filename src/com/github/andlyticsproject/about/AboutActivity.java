@@ -4,16 +4,16 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.Tab;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.ActionBar.Tab;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.MenuItem;
 import com.github.andlyticsproject.R;
 
-public class AboutActivity extends SherlockFragmentActivity implements
+public class AboutActivity extends ActionBarActivity implements
 		ActionBar.TabListener {
 	private static final String BUNDLE_KEY_TABINDEX = "tabindex";
 
@@ -21,7 +21,7 @@ public class AboutActivity extends SherlockFragmentActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		
+
 		setContentView(R.layout.about_navigation);
 
 		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -71,7 +71,7 @@ public class AboutActivity extends SherlockFragmentActivity implements
 	public void onTabUnselected(Tab tab, FragmentTransaction transaction) {
 		Log.i("Tab Unselected", tab.getText().toString());
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -90,7 +90,7 @@ public class AboutActivity extends SherlockFragmentActivity implements
 	public void onOpenGithubClick(View view) {
 		openBrowser(this.getString(R.string.github_url));
 	}
-	
+
 	public void onOpenFeedbackClick(View view) {
 		openBrowser(this.getString(R.string.github_issues_url));
 	}

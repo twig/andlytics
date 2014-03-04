@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="Theme.Andlytics" parent="Theme.Sherlock.Light.DarkActionBar">
+    <style name="Theme.Andlytics" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="actionBarStyle">@style/Widget.Andlytics.ActionBar</item>
     </style>
 
-    <style name="Widget.Andlytics.ActionBar" parent="@style/Widget.Sherlock.Light.ActionBar.Solid.Inverse">
+    <style name="Widget.Andlytics.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="subtitleTextStyle">@style/TextAppearance.Andlytics.Widget.ActionBar.Subtitle</item>
     </style>
 
-    <style name="TextAppearance.Andlytics.Widget.ActionBar.Subtitle" parent="Widget">
-        <item name="android:textSize">@dimen/abs__action_bar_subtitle_text_size</item>
+    <style name="TextAppearance.Andlytics.Widget.ActionBar.Subtitle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
+        <item name="android:textSize">@dimen/abc_action_bar_subtitle_text_size</item>
         <item name="android:textColor">@android:color/secondary_text_dark</item>
     </style>
 

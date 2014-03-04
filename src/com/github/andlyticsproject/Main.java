@@ -1,5 +1,16 @@
 package com.github.andlyticsproject;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -14,8 +25,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.OnNavigationListener;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -26,10 +41,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.github.andlyticsproject.Preferences.StatsMode;
 import com.github.andlyticsproject.Preferences.Timeframe;
 import com.github.andlyticsproject.about.AboutActivity;
@@ -47,17 +58,6 @@ import com.github.andlyticsproject.util.ChangelogBuilder;
 import com.github.andlyticsproject.util.DetachableAsyncTask;
 import com.github.andlyticsproject.util.Utils;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class Main extends BaseActivity implements OnNavigationListener {
 
@@ -224,7 +224,7 @@ public class Main extends BaseActivity implements OnNavigationListener {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.clear();
-		getSupportMenuInflater().inflate(R.menu.main_menu, menu);
+		getMenuInflater().inflate(R.menu.main_menu, menu);
 		statsModeMenuItem = menu.findItem(R.id.itemMainmenuStatsMode);
 		if (isRefreshing())
 			menu.findItem(R.id.itemMainmenuRefresh).setActionView(
@@ -235,7 +235,7 @@ public class Main extends BaseActivity implements OnNavigationListener {
 
 	/**
 	 * Called if item in option menu is selected.
-	 * 
+	 *
 	 * @param item
 	 * The chosen menu item
 	 * @return boolean true/false
@@ -277,7 +277,7 @@ public class Main extends BaseActivity implements OnNavigationListener {
 			startActivity(exportIntent);
 			break;
 		case R.id.itemMainmenuAbout:
-			// launch about activity				
+			// launch about activity
 			Intent aboutIntent = new Intent(this, AboutActivity.class);
 			startActivity(aboutIntent);
 			break;
@@ -398,7 +398,7 @@ public class Main extends BaseActivity implements OnNavigationListener {
 				AccountSelectorAdaper accountsAdapter = new AccountSelectorAdaper(context,
 						R.layout.account_selector_item, developerAccounts);
 				accountsAdapter
-						.setDropDownViewResource(com.actionbarsherlock.R.layout.sherlock_spinner_dropdown_item);
+						.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
 
 				// Hide the title to avoid duplicated info on tablets/landscape
 				// & setup the spinner
@@ -741,7 +741,7 @@ public class Main extends BaseActivity implements OnNavigationListener {
 
 	/**
 	 * checks if the app is started for the first time (after an update).
-	 * 
+	 *
 	 * @return <code>true</code> if this is the first start (after an update)
 	 * else <code>false</code>
 	 */
@@ -769,7 +769,8 @@ public class Main extends BaseActivity implements OnNavigationListener {
 		final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 		ChangelogBuilder.create(this, new Dialog.OnClickListener() {
 
-			public void onClick(DialogInterface dialogInterface, int i) {
+			@Override
+            public void onClick(DialogInterface dialogInterface, int i) {
 				// Mark this version as read
 				sp.edit().putLong(LAST_VERSION_CODE_KEY, versionCode).commit();
 

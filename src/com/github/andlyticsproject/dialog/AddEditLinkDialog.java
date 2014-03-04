@@ -13,10 +13,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.github.andlyticsproject.R;
 
-public class AddEditLinkDialog extends SherlockDialogFragment {
+public class AddEditLinkDialog extends DialogFragment {
 	private EditText urlInput;
 	private EditText nameInput;
 
@@ -69,7 +68,8 @@ public class AddEditLinkDialog extends SherlockDialogFragment {
 
 		view.findViewById(R.id.appinfo_link_addedit_dialog_positive_button)
 				.setOnClickListener(new OnClickListener() {
-					public void onClick(View v) {
+					@Override
+                    public void onClick(View v) {
 						String urlString = urlInput.getText().toString();
 						String nameString = nameInput.getText().toString();
 
@@ -98,7 +98,8 @@ public class AddEditLinkDialog extends SherlockDialogFragment {
 
 		view.findViewById(R.id.appinfo_link_addedit_dialog_negative_button)
 				.setOnClickListener(new OnClickListener() {
-					public void onClick(View v) {
+					@Override
+                    public void onClick(View v) {
 						dismiss();
 					}
 				});

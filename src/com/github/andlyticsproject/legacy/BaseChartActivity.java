@@ -5,6 +5,8 @@ import java.util.List;
 
 import android.os.Bundle;
 import android.text.Html;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -15,8 +17,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.github.andlyticsproject.BaseChartListAdapter;
 import com.github.andlyticsproject.ChartSwitcher;
 import com.github.andlyticsproject.Preferences;
@@ -113,7 +113,7 @@ public abstract class BaseChartActivity extends BaseDetailsActivity implements
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		getSupportMenuInflater().inflate(R.menu.charts_menu, menu);
+		getMenuInflater().inflate(R.menu.charts_menu, menu);
 		MenuItem activeTimeFrame = null;
 		switch (currentTimeFrame) {
 		case LAST_SEVEN_DAYS:
@@ -144,7 +144,7 @@ public abstract class BaseChartActivity extends BaseDetailsActivity implements
 
 	/**
 	 * Called if item in option menu is selected.
-	 * 
+	 *
 	 * @param item
 	 * The chosen menu item
 	 * @return boolean true/false
@@ -211,7 +211,7 @@ public abstract class BaseChartActivity extends BaseDetailsActivity implements
 
 	/**
 	 * Called when chart is selected
-	 * 
+	 *
 	 * @param page
 	 * @param column
 	 */

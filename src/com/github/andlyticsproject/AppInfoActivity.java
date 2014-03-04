@@ -13,7 +13,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -22,11 +27,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.ActionMode;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.github.andlyticsproject.cache.AppIconInMemoryCache;
 import com.github.andlyticsproject.db.AndlyticsDb;
 import com.github.andlyticsproject.dialog.AddEditLinkDialog;
@@ -36,7 +36,7 @@ import com.github.andlyticsproject.model.Link;
 import com.github.andlyticsproject.util.DetachableAsyncTask;
 import com.github.andlyticsproject.util.Utils;
 
-public class AppInfoActivity extends SherlockFragmentActivity implements
+public class AppInfoActivity extends ActionBarActivity implements
 		AddEditLinkDialog.OnFinishAddEditLinkDialogListener, OnItemLongClickListener {
 
 	public static final String TAG = Main.class.getSimpleName();
@@ -151,7 +151,7 @@ public class AppInfoActivity extends SherlockFragmentActivity implements
 			return false;
 		}
 
-		currentActionMode = startActionMode(new ContextCallback(position));
+		currentActionMode = startSupportActionMode(new ContextCallback(position));
 		list.setItemChecked(position, true);
 
 		return true;
@@ -166,17 +166,20 @@ public class AppInfoActivity extends SherlockFragmentActivity implements
 			this.position = position;
 		}
 
-		public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-			MenuInflater inflater = getSupportMenuInflater();
+		@Override
+        public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+			MenuInflater inflater = getMenuInflater();
 			inflater.inflate(R.menu.links_context_menu, menu);
 			return true;
 		}
 
-		public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+		@Override
+        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
 			return false;
 		}
 
-		public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+		@Override
+        public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
 
 			if (menuItem.getItemId() == R.id.itemLinksmenuEdit) {
 				int pos = position - 1; // Subtract one for the header
@@ -200,7 +203,8 @@ public class AppInfoActivity extends SherlockFragmentActivity implements
 			return false;
 		}
 
-		public void onDestroyActionMode(ActionMode actionMode) {
+		@Override
+        public void onDestroyActionMode(ActionMode actionMode) {
 			list.setItemChecked(position, false);
 			currentActionMode = null;
 		}
@@ -209,14 +213,14 @@ public class AppInfoActivity extends SherlockFragmentActivity implements
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.clear();
-		getSupportMenuInflater().inflate(R.menu.links_menu, menu);
+		getMenuInflater().inflate(R.menu.links_menu, menu);
 
 		return true;
 	}
 
 	/**
 	 * Called if item in option menu is selected.
-	 * 
+	 *
 	 * @param item
 	 * The chosen menu item
 	 * @return boolean true/false

@@ -1,5 +1,10 @@
 package com.github.andlyticsproject.io;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.zip.ZipOutputStream;
+
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -7,7 +12,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationCompat.BigTextStyle;
 import android.support.v4.app.NotificationCompat.Builder;
 import android.util.Log;
 
@@ -16,11 +20,6 @@ import com.github.andlyticsproject.Preferences.Timeframe;
 import com.github.andlyticsproject.R;
 import com.github.andlyticsproject.model.AppStatsSummary;
 import com.github.andlyticsproject.util.FileUtils;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.zip.ZipOutputStream;
 
 public class ExportService extends IntentService {
 
@@ -113,11 +112,11 @@ public class ExportService extends IntentService {
 		String title = getResources().getString(R.string.app_name) + ": "
 				+ getApplicationContext().getString(R.string.export_finished);
 
-		Builder builder = new NotificationCompat.Builder(getApplicationContext());
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
 		builder.setSmallIcon(R.drawable.statusbar_andlytics);
 		builder.setContentTitle(title);
 		builder.setContentText(message);
-		BigTextStyle style = new BigTextStyle(builder);
+		NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle(builder);
 		style.bigText(message);
 		style.setBigContentTitle(title);
 		style.setSummaryText(accountName);

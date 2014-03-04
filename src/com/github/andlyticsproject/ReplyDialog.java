@@ -14,9 +14,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
-
-public class ReplyDialog extends SherlockDialogFragment {
+public class ReplyDialog extends DialogFragment {
 
 	public static final int DEVELOPER_REPLY_MAX_CHARACTERS = 350;
 
@@ -57,11 +55,13 @@ public class ReplyDialog extends SherlockDialogFragment {
 
 		// live count comment reply characters
 		replyText.addTextChangedListener(new TextWatcher() {
-			public void beforeTextChanged(CharSequence reply, int start,
+			@Override
+            public void beforeTextChanged(CharSequence reply, int start,
 					int count, int after) {
 			}
 
-			public void onTextChanged(CharSequence reply, int start,
+			@Override
+            public void onTextChanged(CharSequence reply, int start,
 					int before, int count) {
 				// set counter view to current comment length
 				comment_reply_dialog_counter.setText(String.valueOf(reply
@@ -87,7 +87,8 @@ public class ReplyDialog extends SherlockDialogFragment {
 				}
 			}
 
-			public void afterTextChanged(Editable e) {
+			@Override
+            public void afterTextChanged(Editable e) {
 			}
 		});
 
@@ -101,13 +102,15 @@ public class ReplyDialog extends SherlockDialogFragment {
 
 		view.findViewById(R.id.comment_reply_dialog_negative_button)
 				.setOnClickListener(new OnClickListener() {
-					public void onClick(View v) {
+					@Override
+                    public void onClick(View v) {
 						dismiss();
 					}
 				});
 		view.findViewById(R.id.comment_reply_dialog_positive_button)
 				.setOnClickListener(new OnClickListener() {
-					public void onClick(View v) {
+					@Override
+                    public void onClick(View v) {
 						String reply = replyText.getText().toString();
 						CommentReplier activity = (CommentReplier) getActivity();
 						if (activity != null) {

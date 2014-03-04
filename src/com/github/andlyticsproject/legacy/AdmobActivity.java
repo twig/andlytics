@@ -15,7 +15,10 @@ import android.accounts.AccountManagerFuture;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -25,8 +28,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.github.andlyticsproject.AdmobListAdapter;
 import com.github.andlyticsproject.AndlyticsApp;
 import com.github.andlyticsproject.ContentAdapter;
@@ -174,13 +175,12 @@ public class AdmobActivity extends BaseChartActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.clear();
-		getSupportMenuInflater().inflate(R.menu.admob_menu, menu);
+		getMenuInflater().inflate(R.menu.admob_menu, menu);
 		super.onCreateOptionsMenu(menu);
 		String[] admobDetails = AndlyticsDb.getInstance(this).getAdmobDetails(packageName);
 
 		if (isRefreshing()) {
-			menu.findItem(R.id.itemChartsmenuRefresh).setActionView(
-					R.layout.action_bar_indeterminate_progress);
+		    MenuItemCompat.setActionView(menu.findItem(R.id.itemChartsmenuRefresh), R.layout.action_bar_indeterminate_progress);
 		}
 		if (admobDetails == null) {
 			menu.findItem(R.id.itemAdmobsmenuRemove).setVisible(false);
@@ -192,7 +192,7 @@ public class AdmobActivity extends BaseChartActivity {
 
 	/**
 	 * Called if item in option menu is selected.
-	 * 
+	 *
 	 * @param item
 	 * The chosen menu item
 	 * @return boolean true/false
@@ -267,7 +267,8 @@ public class AdmobActivity extends BaseChartActivity {
 	private void addNewAdmobAccount() {
 
 		AccountManagerCallback<Bundle> callback = new AccountManagerCallback<Bundle>() {
-			public void run(AccountManagerFuture<Bundle> future) {
+			@Override
+            public void run(AccountManagerFuture<Bundle> future) {
 				try {
 					Bundle bundle = future.getResult();
 					bundle.keySet();
@@ -583,7 +584,7 @@ public class AdmobActivity extends BaseChartActivity {
 
 		ll = (RelativeLayout) getLayoutInflater().inflate(R.layout.admob_config_addaccount, null);
 		accountList = (ViewGroup) ll.findViewById(R.id.admob_accountlist);
-		addAccountButton = (View) ll.findViewById(R.id.admob_addaccount_button);
+		addAccountButton = ll.findViewById(R.id.admob_addaccount_button);
 		ret.add(ll);
 
 		addAccountButton.setOnClickListener(new OnClickListener() {

@@ -8,14 +8,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.github.andlyticsproject.CommentReplier;
 import com.github.andlyticsproject.CommentsListAdapter;
 import com.github.andlyticsproject.ContentAdapter;
@@ -104,17 +105,18 @@ public class CommentsActivity extends BaseDetailsActivity implements CommentRepl
 
 	private State state = new State();
 
-	public void onCreate(Bundle savedInstanceState) {
+	@Override
+    public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.comments);
 
 		list = (ExpandableListView) findViewById(R.id.comments_list);
 		// TODO Use ListView.setEmptyView
-		nocomments = (View) findViewById(R.id.comments_nocomments);
+		nocomments = findViewById(R.id.comments_nocomments);
 
 		// footer
 		View inflate = getLayoutInflater().inflate(R.layout.comments_list_footer, null);
-		footer = (View) inflate.findViewById(R.id.comments_list_footer);
+		footer = inflate.findViewById(R.id.comments_list_footer);
 		list.addFooterView(inflate, null, false);
 
 		View header = getLayoutInflater().inflate(R.layout.comments_list_header, null);
@@ -171,10 +173,9 @@ public class CommentsActivity extends BaseDetailsActivity implements CommentRepl
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.clear();
-		getSupportMenuInflater().inflate(R.menu.comments_menu, menu);
+		getMenuInflater().inflate(R.menu.comments_menu, menu);
 		if (isRefreshing()) {
-			menu.findItem(R.id.itemCommentsmenuRefresh).setActionView(
-					R.layout.action_bar_indeterminate_progress);
+		    MenuItemCompat.setActionView(menu.findItem(R.id.itemCommentsmenuRefresh), R.layout.action_bar_indeterminate_progress);
 		}
 
 		return true;
@@ -182,7 +183,7 @@ public class CommentsActivity extends BaseDetailsActivity implements CommentRepl
 
 	/**
 	 * Called if item in option menu is selected.
-	 * 
+	 *
 	 * @param item
 	 * The chosen menu item
 	 * @return boolean true/false
@@ -478,7 +479,8 @@ public class CommentsActivity extends BaseDetailsActivity implements CommentRepl
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
-	public void showReplyDialog(Comment comment) {
+	@Override
+    public void showReplyDialog(Comment comment) {
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		Fragment prev = getSupportFragmentManager().findFragmentByTag(REPLY_DIALOG_FRAGMENT);
 		if (prev != null) {
@@ -497,7 +499,8 @@ public class CommentsActivity extends BaseDetailsActivity implements CommentRepl
 		replyDialog.show(ft, REPLY_DIALOG_FRAGMENT);
 	}
 
-	public void hideReplyDialog() {
+	@Override
+    public void hideReplyDialog() {
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		Fragment dialog = getSupportFragmentManager().findFragmentByTag(REPLY_DIALOG_FRAGMENT);
 		if (dialog != null) {
@@ -506,7 +509,8 @@ public class CommentsActivity extends BaseDetailsActivity implements CommentRepl
 		}
 	}
 
-	public void replyToComment(final String commentUniqueId, final String replyText) {
+	@Override
+    public void replyToComment(final String commentUniqueId, final String replyText) {
 		Utils.execute(new DetachableAsyncTask<Void, Void, Comment, CommentsActivity>(this) {
 
 			Exception error;

@@ -21,8 +21,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -32,10 +37,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.github.andlyticsproject.Preferences.Timeframe;
 import com.github.andlyticsproject.admob.AdmobAccountAuthenticator;
 import com.github.andlyticsproject.admob.AdmobRequest;
@@ -300,8 +301,7 @@ public class AdmobFragment extends ChartFragment<AdmobStats> implements
 				statsActivity.getPackage());
 
 		if (statsActivity.isRefreshing()) {
-			menu.findItem(R.id.itemAdmobsmenuRefresh).setActionView(
-					R.layout.action_bar_indeterminate_progress);
+		    MenuItemCompat.setActionView(menu.findItem(R.id.itemAdmobsmenuRefresh), R.layout.action_bar_indeterminate_progress);
 		}
 		if (admobDetails == null) {
 			menu.findItem(R.id.itemAdmobsmenuRemove).setVisible(false);
@@ -460,7 +460,7 @@ public class AdmobFragment extends ChartFragment<AdmobStats> implements
 			return;
 		}
 
-		// can't have two loaders with different interface, use 
+		// can't have two loaders with different interface, use
 		// AsyncTask and retained fragment
 		if (loadSitesTask != null) {
 			loadSitesTask.cancel(true);
@@ -476,7 +476,7 @@ public class AdmobFragment extends ChartFragment<AdmobStats> implements
 			return;
 		}
 
-		// can't have two loaders with different interface, use 
+		// can't have two loaders with different interface, use
 		// AsyncTask and retained fragment
 		if (loadAdUnitsTask != null) {
 			loadAdUnitsTask.cancel(true);
@@ -489,7 +489,8 @@ public class AdmobFragment extends ChartFragment<AdmobStats> implements
 
 	private void addNewAdmobAccount() {
 		AccountManagerCallback<Bundle> callback = new AccountManagerCallback<Bundle>() {
-			public void run(AccountManagerFuture<Bundle> future) {
+			@Override
+            public void run(AccountManagerFuture<Bundle> future) {
 				try {
 					Bundle bundle = future.getResult();
 					bundle.keySet();
@@ -566,7 +567,7 @@ public class AdmobFragment extends ChartFragment<AdmobStats> implements
 		ll = (RelativeLayout) getActivity().getLayoutInflater().inflate(
 				R.layout.admob_config_addaccount, null);
 		accountList = (ViewGroup) ll.findViewById(R.id.admob_accountlist);
-		addAccountButton = (View) ll.findViewById(R.id.admob_addaccount_button);
+		addAccountButton = ll.findViewById(R.id.admob_addaccount_button);
 		ret.add(ll);
 
 		addAccountButton.setOnClickListener(new OnClickListener() {
@@ -705,7 +706,7 @@ public class AdmobFragment extends ChartFragment<AdmobStats> implements
 
 							admobFragment.mainViewSwitcher.swap();
 							admobFragment.loadRemoteData();
-							((SherlockFragmentActivity) activity).supportInvalidateOptionsMenu();
+							((ActionBarActivity) activity).supportInvalidateOptionsMenu();
 						}
 					});
 					admobFragment.siteList.addView(inflate);
@@ -819,7 +820,7 @@ public class AdmobFragment extends ChartFragment<AdmobStats> implements
 
 							admobFragment.mainViewSwitcher.swap();
 							admobFragment.loadRemoteData();
-							((SherlockFragmentActivity) activity).supportInvalidateOptionsMenu();
+							((ActionBarActivity) activity).supportInvalidateOptionsMenu();
 						}
 					});
 					admobFragment.siteList.addView(inflate);

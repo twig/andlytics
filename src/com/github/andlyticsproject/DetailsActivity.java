@@ -8,12 +8,12 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.Tab;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.ActionBar.Tab;
-import com.actionbarsherlock.view.MenuItem;
 import com.github.andlyticsproject.console.v2.DevConsoleRegistry;
 import com.github.andlyticsproject.console.v2.DevConsoleV2;
 import com.github.andlyticsproject.db.AndlyticsDb;
@@ -61,7 +61,8 @@ public class DetailsActivity extends BaseActivity implements DetailedStatsActivi
 			fragment = activity.getSupportFragmentManager().findFragmentByTag(tag);
 		}
 
-		public void onTabSelected(Tab tab, FragmentTransaction ft) {
+		@Override
+        public void onTabSelected(Tab tab, FragmentTransaction ft) {
 			if (fragment == null) {
 				fragment = Fragment.instantiate(activity, clazz.getName());
 				ft.add(android.R.id.content, fragment, tag);
@@ -75,13 +76,15 @@ public class DetailsActivity extends BaseActivity implements DetailedStatsActivi
 			}
 		}
 
-		public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+		@Override
+        public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 			if (fragment != null) {
 				ft.detach(fragment);
 			}
 		}
 
-		public void onTabReselected(Tab tab, FragmentTransaction ft) {
+		@Override
+        public void onTabReselected(Tab tab, FragmentTransaction ft) {
 		}
 	}
 
@@ -102,7 +105,7 @@ public class DetailsActivity extends BaseActivity implements DetailedStatsActivi
 			BitmapDrawable icon = new BitmapDrawable(getResources(), bm);
 			actionBar.setIcon(icon);
 		}
-		
+
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 		Tab tab = actionBar
@@ -170,7 +173,8 @@ public class DetailsActivity extends BaseActivity implements DetailedStatsActivi
 		super.onResume();
 	}
 
-	protected void onSaveInstanceState(Bundle state) {
+	@Override
+    protected void onSaveInstanceState(Bundle state) {
 		super.onSaveInstanceState(state);
 		state.putInt(EXTRA_SELECTED_TAB_IDX, getSupportActionBar().getSelectedNavigationIndex());
 	}
@@ -188,7 +192,8 @@ public class DetailsActivity extends BaseActivity implements DetailedStatsActivi
 		}
 	}
 
-	public void showReplyDialog(Comment comment) {
+	@Override
+    public void showReplyDialog(Comment comment) {
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		Fragment prev = getSupportFragmentManager().findFragmentByTag(REPLY_DIALOG_FRAGMENT);
 		if (prev != null) {
@@ -208,7 +213,8 @@ public class DetailsActivity extends BaseActivity implements DetailedStatsActivi
 		replyDialog.show(ft, REPLY_DIALOG_FRAGMENT);
 	}
 
-	public void hideReplyDialog() {
+	@Override
+    public void hideReplyDialog() {
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		Fragment dialog = getSupportFragmentManager().findFragmentByTag(REPLY_DIALOG_FRAGMENT);
 		if (dialog != null) {
@@ -217,7 +223,8 @@ public class DetailsActivity extends BaseActivity implements DetailedStatsActivi
 		}
 	}
 
-	public void replyToComment(final String commentUniqueId, final String replyText) {
+	@Override
+    public void replyToComment(final String commentUniqueId, final String replyText) {
 		Utils.execute(new DetachableAsyncTask<Void, Void, Comment, DetailsActivity>(this) {
 
 			Exception error;

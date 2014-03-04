@@ -1,5 +1,11 @@
 package com.github.andlyticsproject;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -7,10 +13,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
@@ -18,8 +26,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Window;
 import com.github.andlyticsproject.io.ImportService;
 import com.github.andlyticsproject.io.ServiceException;
 import com.github.andlyticsproject.io.StatsCsvReaderWriter;
@@ -27,13 +33,7 @@ import com.github.andlyticsproject.util.DetachableAsyncTask;
 import com.github.andlyticsproject.util.FileUtils;
 import com.github.andlyticsproject.util.Utils;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-public class ImportActivity extends SherlockFragmentActivity {
+public class ImportActivity extends ActionBarActivity {
 
 	private static final String TAG = ImportActivity.class.getSimpleName();
 
@@ -108,7 +108,7 @@ public class ImportActivity extends SherlockFragmentActivity {
 	}
 
 	private void setupViews() {
-		View closeButton = (View) this.findViewById(R.id.import_dialog_close_button);
+		View closeButton = this.findViewById(R.id.import_dialog_close_button);
 		closeButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -116,7 +116,7 @@ public class ImportActivity extends SherlockFragmentActivity {
 			}
 		});
 
-		View importButton = (View) this.findViewById(R.id.import_dialog_import_button);
+		View importButton = this.findViewById(R.id.import_dialog_import_button);
 		importButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -187,12 +187,14 @@ public class ImportActivity extends SherlockFragmentActivity {
 							getResources().getString(R.string.import_confirm_dialog_message,
 									numExistingApps))
 					.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int whichButton) {
+						@Override
+                        public void onClick(DialogInterface dialog, int whichButton) {
 							((ImportActivity) getActivity()).startImport();
 						}
 					})
 					.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int whichButton) {
+						@Override
+                        public void onClick(DialogInterface dialog, int whichButton) {
 							dismiss();
 						}
 					}).create();

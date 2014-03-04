@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -15,7 +16,6 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.github.andlyticsproject.admob.AdmobAccountRemovedException;
 import com.github.andlyticsproject.admob.AdmobAskForPasswordException;
 import com.github.andlyticsproject.admob.AdmobGenericException;
@@ -33,7 +33,7 @@ import com.github.andlyticsproject.legacy.ChartActivity;
 import com.github.andlyticsproject.util.Utils;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
-public class BaseActivity extends SherlockFragmentActivity {
+public class BaseActivity extends ActionBarActivity {
 
 	private static final String TAG = BaseActivity.class.getSimpleName();
 
@@ -170,7 +170,8 @@ public class BaseActivity extends SherlockFragmentActivity {
 			builder.setPositiveButton(getString(R.string.update_button),
 					new DialogInterface.OnClickListener() {
 
-						public void onClick(DialogInterface dialog, int which) {
+						@Override
+                        public void onClick(DialogInterface dialog, int which) {
 
 							Intent goToMarket = null;
 							goToMarket = new Intent(Intent.ACTION_VIEW, Uri
@@ -184,7 +185,8 @@ public class BaseActivity extends SherlockFragmentActivity {
 			builder.setNegativeButton(getString(R.string.cancel),
 					new DialogInterface.OnClickListener() {
 
-						public void onClick(DialogInterface dialog, int which) {
+						@Override
+                        public void onClick(DialogInterface dialog, int which) {
 							dialog.dismiss();
 						}
 
@@ -205,7 +207,8 @@ public class BaseActivity extends SherlockFragmentActivity {
 			builder.setPositiveButton(getString(R.string.send_report_button),
 					new DialogInterface.OnClickListener() {
 
-						public void onClick(DialogInterface dialog, int which) {
+						@Override
+                        public void onClick(DialogInterface dialog, int which) {
 
 							if (!isFinishing()) {
 
@@ -227,7 +230,8 @@ public class BaseActivity extends SherlockFragmentActivity {
 			builder.setNegativeButton(getString(R.string.cancel),
 					new DialogInterface.OnClickListener() {
 
-						public void onClick(DialogInterface dialog, int which) {
+						@Override
+                        public void onClick(DialogInterface dialog, int which) {
 							dialog.dismiss();
 						}
 
@@ -252,7 +256,8 @@ public class BaseActivity extends SherlockFragmentActivity {
 			builder.setPositiveButton(getString(R.string.send_report_button),
 					new DialogInterface.OnClickListener() {
 
-						public void onClick(DialogInterface dialog, int which) {
+						@Override
+                        public void onClick(DialogInterface dialog, int which) {
 
 							Thread thread = new Thread(new Runnable() {
 
@@ -269,7 +274,8 @@ public class BaseActivity extends SherlockFragmentActivity {
 			builder.setNegativeButton(getString(R.string.cancel),
 					new DialogInterface.OnClickListener() {
 
-						public void onClick(DialogInterface dialog, int which) {
+						@Override
+                        public void onClick(DialogInterface dialog, int which) {
 							dialog.dismiss();
 						}
 
@@ -291,7 +297,8 @@ public class BaseActivity extends SherlockFragmentActivity {
 			builder.setPositiveButton(getString(R.string.logout),
 					new DialogInterface.OnClickListener() {
 
-						public void onClick(DialogInterface dialog, int which) {
+						@Override
+                        public void onClick(DialogInterface dialog, int which) {
 							dialog.dismiss();
 							developerAccountManager.unselectDeveloperAccount();
 							Preferences.saveSkipAutoLogin(BaseActivity.this, true);
@@ -306,7 +313,8 @@ public class BaseActivity extends SherlockFragmentActivity {
 			builder.setNegativeButton(getString(R.string.cancel),
 					new DialogInterface.OnClickListener() {
 
-						public void onClick(DialogInterface dialog, int which) {
+						@Override
+                        public void onClick(DialogInterface dialog, int which) {
 							dialog.dismiss();
 							developerAccountManager.unselectDeveloperAccount();
 							Preferences.saveSkipAutoLogin(BaseActivity.this, true);
@@ -410,7 +418,8 @@ public class BaseActivity extends SherlockFragmentActivity {
 
 	private void showGooglePlayServicesAvailabilityErrorDialog(final int connectionStatusCode) {
 		runOnUiThread(new Runnable() {
-			public void run() {
+			@Override
+            public void run() {
 				Dialog dialog = GooglePlayServicesUtil.getErrorDialog(connectionStatusCode,
 						BaseActivity.this, REQUEST_GOOGLE_PLAY_SERVICES);
 				dialog.show();

@@ -15,6 +15,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +31,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.github.andlyticsproject.cache.AppIconInMemoryCache;
 import com.github.andlyticsproject.io.ExportService;
 import com.github.andlyticsproject.io.StatsCsvReaderWriter;
@@ -38,7 +38,7 @@ import com.github.andlyticsproject.model.AppInfo;
 import com.github.andlyticsproject.util.DetachableAsyncTask;
 import com.github.andlyticsproject.util.Utils;
 
-public class ExportActivity extends SherlockFragmentActivity {
+public class ExportActivity extends ActionBarActivity {
 
 	private static final String TAG = ExportActivity.class.getSimpleName();
 
@@ -188,12 +188,14 @@ public class ExportActivity extends SherlockFragmentActivity {
 							getResources().getString(R.string.export_confirm_dialog_message,
 									filename))
 					.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int whichButton) {
+						@Override
+                        public void onClick(DialogInterface dialog, int whichButton) {
 							((ExportActivity) getActivity()).startExport();
 						}
 					})
 					.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int whichButton) {
+						@Override
+                        public void onClick(DialogInterface dialog, int whichButton) {
 							dismiss();
 						}
 					}).create();
@@ -375,7 +377,8 @@ public class ExportActivity extends SherlockFragmentActivity {
 			this.reference = reference;
 		}
 
-		protected void onPostExecute(Bitmap result) {
+		@Override
+        protected void onPostExecute(Bitmap result) {
 
 			// only update the image if tag==reference
 			// (view may have been reused as convertView)

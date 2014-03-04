@@ -6,9 +6,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
-
-import com.actionbarsherlock.app.SherlockPreferenceActivity;
-import com.actionbarsherlock.view.MenuItem;
+import android.view.MenuItem;
 
 // See PreferenceActivity for warning suppression justification
 @SuppressWarnings("deprecation")
