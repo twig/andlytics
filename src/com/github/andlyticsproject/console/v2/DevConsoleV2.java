@@ -172,7 +172,6 @@ public class DevConsoleV2 implements DevConsole {
 			// Keep waiting for the other threads to finish
 		    while (fetchAppInfoCounter < total) {
 		    	try { lock.wait(); } catch (InterruptedException e) { }
-		    	Log.e("count", String.valueOf(fetchAppInfoCounter));
 		    }
 		 }
 
