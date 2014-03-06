@@ -3,6 +3,7 @@ package com.github.andlyticsproject.console.v2;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import org.apache.http.HttpStatus;
 import org.apache.http.client.CookieStore;
@@ -63,7 +64,7 @@ public class DevConsoleV2 implements DevConsole {
 	private ResponseHandler<String> responseHandler = HttpClientFactory.createResponseHandler();
 
 	// This is only used for synchronising fetchAppInfosAndStatistics()
-	private volatile int fetchAppInfoCounter;
+	private CountDownLatch fetchAppInfoCounter;
 
 	public static DevConsoleV2 createForAccount(String accountName, DefaultHttpClient httpClient) {
 		DevConsoleAuthenticator authenticator = new OauthAccountManagerAuthenticator(accountName,
@@ -116,9 +117,7 @@ public class DevConsoleV2 implements DevConsole {
 	private List<AppInfo> fetchAppInfosAndStatistics() {
 		// Fetch a list of available apps
 		List<AppInfo> apps = fetchAppInfos();
-		int total = apps.size();
-		final Object lock = new Object();
-		fetchAppInfoCounter = 0;
+		fetchAppInfoCounter = new CountDownLatch(apps.size());
 
 		for (final AppInfo app : apps) {
 			/*
@@ -128,39 +127,49 @@ public class DevConsoleV2 implements DevConsole {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
-					// Fetch remaining app statistics
-					// Latest stats object, and active/total installs is fetched
-					// in fetchAppInfos
-					AppStats stats = app.getLatestStats();
-					fetchRatings(app, stats);
-					stats.setNumberOfComments(fetchCommentsCount(app, Utils.getDisplayLocale()));
+					try {
+						Log.d("start app", app.getName());
 
-					RevenueSummary revenue = fetchRevenueSummary(app);
-					app.setTotalRevenueSummary(revenue);
-					// this is currently the same as the last item of the historical
-					// data, so save some cycles and don't parse historical
-					// XXX the definition of 'last day' is unclear: GMT?
-					if (revenue != null) {
-						stats.setTotalRevenue(revenue.getLastDay());
+						// Fetch remaining app statistics
+						// Latest stats object, and active/total installs is fetched
+						// in fetchAppInfos
+						AppStats stats = app.getLatestStats();
+						fetchRatings(app, stats);
+						stats.setNumberOfComments(fetchCommentsCount(app, Utils.getDisplayLocale()));
+
+						RevenueSummary revenue = fetchRevenueSummary(app);
+						app.setTotalRevenueSummary(revenue);
+						// this is currently the same as the last item of the historical
+						// data, so save some cycles and don't parse historical
+						// XXX the definition of 'last day' is unclear: GMT?
+						if (revenue != null) {
+							stats.setTotalRevenue(revenue.getLastDay());
+						}
+
+						// only works on 11+
+						// XXX the latest recorded revenue is not necessarily today's
+						// revenue. Check the date and do something clever or revise
+						// how of all this is stored?
+
+						// if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+						// Revenue latestRevenue = fetchLatestTotalRevenue(app);
+						// if (latestRevenue != null) {
+						// stats.setTotalRevenue(latestRevenue.getAmount());
+						// }
+						// }
+
+						Log.d("end app", app.getName());
 					}
+					finally {
+						Log.w("finally app", app.getName());
 
-					// only works on 11+
-					// XXX the latest recorded revenue is not necessarily today's
-					// revenue. Check the date and do something clever or revise
-					// how of all this is stored?
+						// Increment the number of successful fetches, then wake the lock.
+						synchronized (fetchAppInfoCounter) {
+							Log.e("fetch counter", String.valueOf(fetchAppInfoCounter.getCount()));
+							fetchAppInfoCounter.countDown();
 
-					// if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-					// Revenue latestRevenue = fetchLatestTotalRevenue(app);
-					// if (latestRevenue != null) {
-					// stats.setTotalRevenue(latestRevenue.getAmount());
-					// }
-					// }
-
-
-					// Increment the number of successful fetches, then wake the lock.
-					synchronized (lock) {
-						fetchAppInfoCounter++;
-						lock.notify();
+							Log.w("finally count", String.valueOf(fetchAppInfoCounter.getCount()));
+						}
 					}
 				}
 			}).start();
@@ -168,12 +177,15 @@ public class DevConsoleV2 implements DevConsole {
 
 
 		// Wait for lock to be triggered
-		synchronized (lock) {
-			// Keep waiting for the other threads to finish
-		    while (fetchAppInfoCounter < total) {
-		    	try { lock.wait(); } catch (InterruptedException e) { }
-		    }
-		 }
+		// Keep waiting for the other threads to finish
+    	try {
+    		Log.e("Waiting", "waiting...");
+			fetchAppInfoCounter.await();
+		}
+		catch (InterruptedException e) {
+		}
+
+    	Log.e("Waiting", "DONE!");
 
 		return apps;
 	}
