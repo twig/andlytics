@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.http.HttpStatus;
 import org.apache.http.client.CookieStore;
@@ -116,6 +118,7 @@ public class DevConsoleV2 implements DevConsole {
 
 	private List<AppInfo> fetchAppInfosAndStatistics() {
 		// Fetch a list of available apps
+		ExecutorService executor = Executors.newFixedThreadPool(5); // Only process 5 at a time
 		List<AppInfo> apps = fetchAppInfos();
 		fetchAppInfoCounter = new CountDownLatch(apps.size());
 
@@ -124,7 +127,7 @@ public class DevConsoleV2 implements DevConsole {
 			 * Generate a new thread for each app. This removes the queueing behaviour so requests
 			 * are made in parallel.
 			 */
-			new Thread(new Runnable() {
+			Thread thread = new Thread(new Runnable() {
 				@Override
 				public void run() {
 					try {
@@ -172,7 +175,9 @@ public class DevConsoleV2 implements DevConsole {
 						}
 					}
 				}
-			}).start();
+			});
+
+			executor.execute(thread);
 		}
 
 
