@@ -118,7 +118,7 @@ public class DevConsoleV2 implements DevConsole {
 
 	private List<AppInfo> fetchAppInfosAndStatistics() {
 		// Fetch a list of available apps
-		ExecutorService executor = Executors.newFixedThreadPool(5); // Only process 5 at a time
+		ExecutorService executor = Executors.newFixedThreadPool(10); // Only process 10 at a time
 		List<AppInfo> apps = fetchAppInfos();
 		fetchAppInfoCounter = new CountDownLatch(apps.size());
 
